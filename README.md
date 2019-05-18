@@ -1,5 +1,5 @@
 # Minecraft Discord Status
-A nerdy, personal project xd
+Nobody else will ever use this but it was fun to make the project from start/planning to finish/publishing and documenting I guess??
 
 ## About
 
