@@ -4,9 +4,9 @@ import discord
 import sys
 import datetime
 
-version = '1.1'
+version = '1.1.1'
 
-class vars():
+class config():
     serverip = '' # Input your server IP or hostname (e.g. mc.mywebsite.tld or 1.2.3.4)
     serverport = '25565' # Leave as 25565 unless you know what you're doing
     api = 'https://api.minetools.eu/' + serverip + '/' + serverport + '/' # DO NOT EDIT THIS LINE
@@ -29,7 +29,7 @@ def timenow():
     return str(datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
 
 try:
-    if int(vars.updates) == vars.updates and int(vars.prevcur) == vars.prevcur and int(vars.runs) == vars.runs:
+    if int(config.updates) == config.updates and int(config.prevcur) == config.prevcur and int(config.runs) == config.runs:
         print("[INFO  | " + timenow() + "] Checked variables successfully.")
 except Exception as e:
     print("[ERROR | " + timenow() + "] Looks like you didn't leave the integer values as integers! Try again.")
@@ -37,11 +37,11 @@ except Exception as e:
 
 print("[INFO  | " + timenow() + "] Starting Minecraft Discord Status v" + version + " by @maxicc :)")
 print("[INFO  | " + timenow() + "] Something broken? Moan at me: https://git.io/fj810")
-print("[INFO  | " + timenow() + "] Checking for new Discord commands and Minecraft player changes every " + str(vars.updates) + " seconds.")
+print("[INFO  | " + timenow() + "] Checking for new Discord commands and Minecraft player changes every " + str(config.updates) + " seconds.")
 
 @client.event
 async def on_message(message):
-    dchannel = client.get_channel(int(vars.channel))
+    dchannel = client.get_channel(int(config.channel))
     if message.content.startswith("!kill") or message.content.startswith("!shutdown") or message.content.startswith("!stop"):
         await dchannel.send(emojis.allow + " Shutting down!")
         time.sleep(5)
@@ -50,17 +50,17 @@ async def on_message(message):
 
 @client.event
 async def on_ready():
-    dchannel = client.get_channel(int(vars.channel))
+    dchannel = client.get_channel(int(config.channel))
     print("[INFO  | " + timenow() + "] Logged in to Discord as "+ client.user.name + "#" + client.user.discriminator + " ("+ str(client.user.id) + ") successfully!")
     while True: # Keep looping!
-        if vars.api == '' or vars.channel == '' or vars.token == '': # Check the user has defined their variables properly
+        if config.api == '' or config.channel == '' or config.token == '': # Check the user has defined their variables properly
             print("[ERROR | " + timenow() + "] Please ensure you have set the variables correctly.")
-            time.sleep(vars.updates) # Don't spam the user (much)
+            time.sleep(config.updates) # Don't spam the user (much)
             continue # Don't try and run the code below without the proper variables set
 
         players = "" # Empty the players variable
         try:
-            response = requests.get(vars.api).json() # Get the api response
+            response = requests.get(config.api).json() # Get the api response
         except Exception as e:
             print("[ERROR | " + timenow() + "] Problem with the API response")
             print("[ERROR | " + timenow() + "] " + str(e)) # This could be an error with the json decoding, accessing the internet or the api... lol
@@ -111,12 +111,12 @@ async def on_ready():
             await dchannel.send(emojis.empty + " Someone just logged off! Nobody is online anymore.")
         elif curplayers < prevcur and curplayers != 0: # Or if the previous amount is more than the current but people still online...
             await dchannel.send(emojis.leave + " Someone just logged off! " + players + " still online.")
-        vars.prevcur = curplayers # Replace prevcur with the current count
-        time.sleep(vars.updates) # Wait for x seconds (give the API a rest, we don't want to be ratelimited)
-        vars.runs = vars.runs + 1 # Increment the run counter
+        config.prevcur = curplayers # Replace prevcur with the current count
+        time.sleep(config.updates) # Wait for x seconds (give the API a rest, we don't want to be ratelimited)
+        config.runs = config.runs + 1 # Increment the run counter
 
 try:
-    client.run(vars.token)
+    client.run(config.token)
 except Exception as e:
     print("[ERROR | " + timenow() + "] Could not start Discord client")
     print("[ERROR | " + timenow() + "] " + str(e))
