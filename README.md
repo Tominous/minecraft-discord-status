@@ -1,4 +1,6 @@
 # Minecraft Discord Status
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-informational.svg)](https://www.python.org/) [![PyPI pyversions](https://img.shields.io/pypi/pyversions/discord.py.svg)](https://pypi.python.org/pypi/discord.py/) [![MIT](https://img.shields.io/badge/license-MIT-green.svg) [![Version 1.1.1](https://img.shields.io/badge/version-1.1.1-informational.svg) [![I love badges](https://img.shields.io/badge/obsessed%20with%20badges%3F-true-blueviolet.svg)
+
 Nobody else will ever use this but it was fun to make the project from start/planning to finish/publishing and documenting I guess??
 
 ## About
