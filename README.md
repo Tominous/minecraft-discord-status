@@ -22,25 +22,25 @@ If you do use it, make sure you have the **rewrite** version of discord.py - not
 **You need a Discord server, channel, application and a bot user.**
 *It sounds a lot more complicated than it is!*
 
-1. Go to [Discord's developer portal](https://www.discordapp.com/developers/applications).
-2. Hit **New Application** and give it a nice name - this will be your bot's name so make it presentable! [(img)](https://i.imgur.com/Kt8eDYN.png)
-3. Customise your application as necessary. [(img)](https://i.imgur.com/tRkXrzT.png)
-4. In the Bot submenu (navigate using the left sidebar), hit **Add Bot** and then confirm the dialog box. [(img)](https://i.imgur.com/Cw6sM22.png)
-5. **DO NOT GIVE OUT YOUR BOT TOKEN TO ANYONE PLEASE FOR THE LOVE OF GOD.**
-6. Now, go to the Oauth2 section and in the URL generator section, tick the "bot" scope. Then, copy the URL in the text box below and go to it in a new tab. [(img)](https://i.imgur.com/QEDd7xB.png)
-7. Select the server you want your bot to join, then accept the permissions prompt. You'll need **Manage Server** permissions wherever you want to add it - you can't just add it to any random server. [(img)](https://i.imgur.com/BW1IgeN.png)
-8. Copy your token (**the one you shouldn't give out to anyone, remember?**) and open the `with-discord.py` file. Paste it between the two `'` quote marks next to `discordtoken`.
-9. In your Discord settings, go to **Appearance** then toggle on **Developer Mode**. *This doesn't change anything about how your Discord app works, it just allows extra options for when you're developing stuff with the Discord API.* [(img)](https://i.imgur.com/fspwlrk.png)
-10. Almost there! Now, go to the server you authorised your bot in and find the channel you want to send the login messages to. Right-click this channel in the left sidebar and click **Copy ID**. Paste this ID between the two `'` quote marks next to `discordchannel` in the `with-discord.py` file. [(img)](https://i.imgur.com/jOdsPuf.png)
+ 1. Go to [Discord's developer portal](https://www.discordapp.com/developers/applications).
+ 2. Hit **New Application** and give it a nice name - this will be your bot's name so make it presentable! [(img)](https://i.imgur.com/Kt8eDYN.png)
+ 3. Customise your application as necessary. [(img)](https://i.imgur.com/tRkXrzT.png)
+ 4. In the Bot submenu (navigate using the left sidebar), hit **Add Bot** and then confirm the dialog box. [(img)](https://i.imgur.com/Cw6sM22.png)
+ 5. **DO NOT GIVE OUT YOUR BOT TOKEN TO ANYONE PLEASE FOR THE LOVE OF GOD.**
+ 6. Now, go to the Oauth2 section and in the URL generator section, tick the "bot" scope. Then, copy the URL in the text box below and go to it in a new tab. [(img)](https://i.imgur.com/QEDd7xB.png)
+ 7. Select the server you want your bot to join, then accept the permissions prompt. You'll need **Manage Server** permissions wherever you want to add it - you can't just add it to any random server. [(img)](https://i.imgur.com/BW1IgeN.png)
+ 8. Copy your token (**the one you shouldn't give out to anyone, remember?**) and open the `with-discord.py` file. Paste it between the two `'` quote marks next to `discordtoken`.
+ 9. In your Discord settings, go to **Appearance** then toggle on **Developer Mode**. *This doesn't change anything about how your Discord app works, it just allows extra options for when you're developing stuff with the Discord API.* [(img)](https://i.imgur.com/fspwlrk.png)
+ 10. Almost there! Now, go to the server you authorised your bot in and find the channel you want to send the login messages to. Right-click this channel in the left sidebar and click **Copy ID**. Paste this ID between the two `'` quote marks next to `discordchannel` in the `with-discord.py` file. [(img)](https://i.imgur.com/jOdsPuf.png)
 
 **You need a Minecraft server and you need to set it up with the MineTools API.**
 *This also sounds complicated...*
 
-1. You should already have a Minecraft server ready to go... if you don't idk why you're here. Make sure your server is online and connectable.
-2. Get your server's IP/hostname and port number (if you never connect with a specific port, it's 25565).
-3. Substitute your server IP/hostname and port number in to the MineTools base URL (`https://api.minetools.eu/ping/<ip/hostname>/<port>`) and visit it in your browser.
-4. The page might look a bit confusing (this is called JSON), but all you need to make sure is that it shows information that looks like it relates to your server; if it says `Errno xyz` or any sort of error, you've got the wrong IP/hostname or port or your server is offline.
-5. Once you have this URL working, copy it from your browser and paste it in between the two `'` quote marks next to `url`.
+ 1. You should already have a Minecraft server ready to go... if you don't idk why you're here. Make sure your server is online and connectable.
+ 2. Get your server's IP/hostname and port number (if you never connect with a specific port, it's 25565).
+ 3. Substitute your server IP/hostname and port number in to the MineTools base URL (`https://api.minetools.eu/ping/<ip/hostname>/<port>`) and visit it in your browser.
+ 4. The page might look a bit confusing (this is called JSON), but all you need to make sure is that it shows information that looks like it relates to your server; if it says `Errno xyz` or any sort of error, you've got the wrong IP/hostname or port or your server is offline.
+ 5. Once you have this URL working, copy it from your browser and paste it in between the two `'` quote marks next to `url`.
 
 **You're done! 🎉**
 Now, just run the bot and it should work!
