@@ -1,5 +1,14 @@
 # Minecraft Discord Status
-Nobody else will ever use this but it was fun to make the project from start/planning to finish/publishing and documenting I guess??
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2eb2f5bcda814bd5b8d6e38dcbf5bd82)](https://app.codacy.com/app/maxicc/minecraft-discord-status?utm_source=github.com&utm_medium=referral&utm_content=maxicc/minecraft-discord-status&utm_campaign=Badge_Grade_Settings)
+
+![version](https://img.shields.io/badge/version-1.1.1-yellow.svg)
+![made-with-python](https://img.shields.io/badge/Made%20with-Python-informational.svg)
+![python-versions](https://img.shields.io/badge/python-3.5%20|%203.6%20|%203.7-critical.svg)
+![MIT-license](https://img.shields.io/badge/license-MIT-green.svg)
+![badges](https://img.shields.io/badge/obsessed%20with%20badges%3F-true-blueviolet.svg)
+
+###### Nobody else will ever use this but it was fun to make the project from start/planning to finish/publishing and documenting I guess??
 
 ## About
 
