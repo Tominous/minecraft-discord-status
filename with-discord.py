@@ -1,58 +1,92 @@
 import requests
 import time
 import discord
+import sys
+import datetime
 
-# Hello! This version DOES connect to Discord!
+version = '1.1'
 
-# CUSTOM OPTIONS GO HERE!
-apiurl = '' # Use api.minetools.eu
-discordchannel = '' # Enable Discord developer options then right-click the channel you want to send to
-discordtoken = '' # Set up a developer application using discordapp.com/developers/applications
-updates = 30 # Time between updates of the API (keep in mind, it is cached and you will get ratelimited!)
+class vars():
+    serverip = '' # Input your server IP or hostname (e.g. mc.mywebsite.tld or 1.2.3.4)
+    serverport = '25565' # Leave as 25565 unless you know what you're doing
+    api = 'https://api.minetools.eu/' + serverip + '/' + serverport + '/' # DO NOT EDIT THIS LINE
+    channel = '' # Enable Discord developer view then right-click the channel you want to send to
+    token = '' # Set up a developer application
+    updates = 30 # Time between updates of the API (keep in mind, it is cached and you will get ratelimited!)
+    prevcur = 0 # Defining the variables as 0 before they're used
+    runs = 0 # Defining the variables as 0 before they're used
 
-prevcur = 0 # Defining the variables as 0 before they're used
-runs = 0 # Defining the variables as 0 before they're used
+class emojis():
+    allow = '' # Indicates success
+    deny = '' # Alternative error
+    join = '' # User joined
+    leave = '' # User left
+    empty = '' # Empty server
 
 client = discord.Client()
 
+def timenow():
+    return str(datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+
+try:
+    if int(vars.updates) == vars.updates and int(vars.prevcur) == vars.prevcur and int(vars.runs) == vars.runs:
+        print("[INFO  | " + timenow() + "] Checked variables successfully.")
+except Exception as e:
+    print("[ERROR | " + timenow() + "] Looks like you didn't leave the integer values as integers! Try again.")
+    sys.exit(0) # Exit to prevent unexpected behaviour
+
+print("[INFO  | " + timenow() + "] Starting Minecraft Discord Status v" + version + " by @maxicc :)")
+print("[INFO  | " + timenow() + "] Something broken? Moan at me: https://git.io/fj810")
+print("[INFO  | " + timenow() + "] Checking for new Discord commands and Minecraft player changes every " + str(vars.updates) + " seconds.")
+
+@client.event
+async def on_message(message):
+    dchannel = client.get_channel(int(vars.channel))
+    if message.content.startswith("!kill") or message.content.startswith("!shutdown") or message.content.startswith("!stop"):
+        await dchannel.send(emojis.allow + " Shutting down!")
+        time.sleep(5)
+        sys.exit(0)
+
+
 @client.event
 async def on_ready():
-    global runs
-    global prevcur
-    global apiurl
-    global discordchannel
-    global discordtoken
-
-    channel = client.get_channel(int(discordchannel))
-    print("Logged in to Disord successfully!")
+    dchannel = client.get_channel(int(vars.channel))
+    print("[INFO  | " + timenow() + "] Logged in to Discord as "+ client.user.name + "#" + client.user.discriminator + " ("+ str(client.user.id) + ") successfully!")
     while True: # Keep looping!
-        if apiurl == '' or discordchannel == '' or discordtoken == '': # Check the user has defined their variables properly
-            print("Set your variables (look at the top of the python file)")
-            time.sleep(10) # Don't spam the user (much)
+        if vars.api == '' or vars.channel == '' or vars.token == '': # Check the user has defined their variables properly
+            print("[ERROR | " + timenow() + "] Please ensure you have set the variables correctly.")
+            time.sleep(vars.updates) # Don't spam the user (much)
             continue # Don't try and run the code below without the proper variables set
 
         players = "" # Empty the players variable
         try:
-            response = requests.get(apiurl).json() # Get the api response
+            response = requests.get(vars.api).json() # Get the api response
         except Exception as e:
-            print("Looks like there's something wrong with the API server! Did you use api.minetools.eu? If so, try again in a while.")
-            print("Here's the error from requests: " + str(e)) # This could be an error with the json decoding, accessing the internet or the api... lol
+            print("[ERROR | " + timenow() + "] Problem with the API response")
+            print("[ERROR | " + timenow() + "] " + str(e)) # This could be an error with the json decoding, accessing the internet or the api... lol
             time.sleep(600) # Don't try again for a while, give the user a chance to fix the error
             continue
+
+        if "error" in response:
+            print("[WARN  | " + timenow() + "] Your server is offline, or MineTools couldn't establish a connection to it.")
+            await client.change_presence(status=discord.Status.online, activity=discord.Game(name="Server is offline :("))
+            await dchannel.send(emojis.deny + " Uh oh, your server is offline!")
+            time.sleep(30)
+            continue
+
         try:
             maxplayers = response['players']['max'] # Define the player amount variables using the json response
             curplayers = response['players']['online']
             onlplayers = response['players']['sample']
         except Exception as e:
-            print("Looks like something went wrong with the json decoding. Are you using the right API server?")
-            print("Here's the error from requests: " + str(e))
+            print("[ERROR | " + timenow() + "] Problem with the JSON response")
+            print("[ERROR | " + timenow() + "] " + str(e))
 
         if curplayers != prevcur:
-            activity = discord.Game(name="Minecraft with " + str(curplayers) + "/" + str(maxplayers))
-            await client.change_presence(status=discord.Status.idle, activity=activity)
-            print("Updated Discord presence")
+            await client.change_presence(status=discord.Status.online, activity=discord.Game(name="Minecraft with " + str(curplayers) + "/" + str(maxplayers)))
+            print("[INFO  | " + timenow() + " Number of players has changed, Discord status updated")
         else:
-            print("No need to update Discord presence, players hasn't changed")
+            print("[INFO  | " + timenow() + " Number of players has not changed, Discord status not updated")
 
         for i in range(curplayers): # For all players currently online...
             if i+1 == curplayers and curplayers != 1: # If we are at the last player, and there is more than 1 player online...
@@ -68,23 +102,21 @@ async def on_ready():
             players = players + " are" # Use are
 
         if runs == 0 and curplayers == 0: # If this is our first run and nobody is online...
-            await channel.send("First run. Nobody is online.")
+            await dchannel.send(emojis.allow + " We're up and running! Nobody is online.")
         elif runs == 0 and curplayers != 0: # Or if this is our first run and there are people already online...
-            await channel.send("First run. " + players + " already online.")
+            await dchannel.send(emojis.allow + " We're up and running! " + players + " already online.")
         elif prevcur < curplayers: # Or if the previous player amount is less than the current...
-            await channel.send("Someone just logged on! " + players + " currently online.")
+            await dchannel.send(emojis.join + " Someone just logged on! " + players + " currently online.")
         elif curplayers < prevcur and curplayers == 0: # Or if the previous amount is more than the current and the current is now 0...
-            await channel.send("Someone just logged off! Nobody is online anymore.")
+            await dchannel.send(emojis.empty + " Someone just logged off! Nobody is online anymore.")
         elif curplayers < prevcur and curplayers != 0: # Or if the previous amount is more than the current but people still online...
-            await channel.send("Someone just logged off! " + players + " still online.")
-        else: # Or if there was no change at all...
-            print("Debugging test. There was no change in player count.")
-        prevcur = curplayers # Replace prevcur with the current count
-        time.sleep(updates) # Wait for x seconds (give the API a rest, we don't want to be ratelimited)
-        runs = runs + 1 # Increment the run counter
+            await dchannel.send(emojis.leave + " Someone just logged off! " + players + " still online.")
+        vars.prevcur = curplayers # Replace prevcur with the current count
+        time.sleep(vars.updates) # Wait for x seconds (give the API a rest, we don't want to be ratelimited)
+        vars.runs = vars.runs + 1 # Increment the run counter
 
 try:
-    client.run(discordtoken)
+    client.run(vars.token)
 except Exception as e:
-    print("Something went wrong while starting the Discord bot! Have you set your variables correctly?")
-    print("Here's the error message from Discord.py: " + str(e))
+    print("[ERROR | " + timenow() + "] Could not start Discord client")
+    print("[ERROR | " + timenow() + "] " + str(e))
