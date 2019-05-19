@@ -4,15 +4,15 @@ import discord
 import sys
 import datetime
 
-version = '1.1.1'
+version = '1.1.2'
 
 class config():
     serverip = '' # Input your server IP or hostname (e.g. mc.mywebsite.tld or 1.2.3.4)
-    serverport = '25565' # Leave as 25565 unless you know what you're doing
-    api = 'https://api.minetools.eu/' + serverip + '/' + serverport + '/' # DO NOT EDIT THIS LINE
+    serverport = '' # Leave as 25565 unless you know what you're doing
+    api = '' + serverip + '/' + serverport + '/' # DO NOT EDIT THIS LINE
     channel = '' # Enable Discord developer view then right-click the channel you want to send to
     token = '' # Set up a developer application
-    updates = 30 # Time between updates of the API (keep in mind, it is cached and you will get ratelimited!)
+    updates = 5 # Time between updates of the API (keep in mind, it is cached and you will get ratelimited!)
     prevcur = 0 # Defining the variables as 0 before they're used
     runs = 0 # Defining the variables as 0 before they're used
 
@@ -82,11 +82,11 @@ async def on_ready():
             print("[ERROR | " + timenow() + "] Problem with the JSON response")
             print("[ERROR | " + timenow() + "] " + str(e))
 
-        if curplayers != prevcur:
+        if curplayers != config.prevcur:
             await client.change_presence(status=discord.Status.online, activity=discord.Game(name="Minecraft with " + str(curplayers) + "/" + str(maxplayers)))
-            print("[INFO  | " + timenow() + " Number of players has changed, Discord status updated")
+            print("[INFO  | " + timenow() + "] Number of players has changed, Discord status updated")
         else:
-            print("[INFO  | " + timenow() + " Number of players has not changed, Discord status not updated")
+            print("[INFO  | " + timenow() + "] Number of players has not changed, Discord status not updated")
 
         for i in range(curplayers): # For all players currently online...
             if i+1 == curplayers and curplayers != 1: # If we are at the last player, and there is more than 1 player online...
@@ -101,15 +101,15 @@ async def on_ready():
         else: # Or if there is more than 1
             players = players + " are" # Use are
 
-        if runs == 0 and curplayers == 0: # If this is our first run and nobody is online...
+        if config.runs == 0 and curplayers == 0: # If this is our first run and nobody is online...
             await dchannel.send(emojis.allow + " We're up and running! Nobody is online.")
-        elif runs == 0 and curplayers != 0: # Or if this is our first run and there are people already online...
+        elif config.runs == 0 and curplayers != 0: # Or if this is our first run and there are people already online...
             await dchannel.send(emojis.allow + " We're up and running! " + players + " already online.")
-        elif prevcur < curplayers: # Or if the previous player amount is less than the current...
+        elif config.prevcur < curplayers: # Or if the previous player amount is less than the current...
             await dchannel.send(emojis.join + " Someone just logged on! " + players + " currently online.")
-        elif curplayers < prevcur and curplayers == 0: # Or if the previous amount is more than the current and the current is now 0...
+        elif curplayers < config.prevcur and curplayers == 0: # Or if the previous amount is more than the current and the current is now 0...
             await dchannel.send(emojis.empty + " Someone just logged off! Nobody is online anymore.")
-        elif curplayers < prevcur and curplayers != 0: # Or if the previous amount is more than the current but people still online...
+        elif curplayers < config.prevcur and curplayers != 0: # Or if the previous amount is more than the current but people still online...
             await dchannel.send(emojis.leave + " Someone just logged off! " + players + " still online.")
         config.prevcur = curplayers # Replace prevcur with the current count
         time.sleep(config.updates) # Wait for x seconds (give the API a rest, we don't want to be ratelimited)
