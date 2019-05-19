@@ -22,7 +22,8 @@ If you do use it, make sure you have the **rewrite** version of discord.py - not
 **You need a Discord server, channel, application and a bot user.**
 *It sounds a lot more complicated than it is!*
 
- 1. Go to [Discord's developer portal](https://www.discordapp.com/developers/applications).
+1. Go to [Discord's developer portal](https://www.discordapp.com/developers/applications).
+
  2. Hit **New Application** and give it a nice name - this will be your bot's name so make it presentable! [(img)](https://i.imgur.com/Kt8eDYN.png)
  3. Customise your application as necessary. [(img)](https://i.imgur.com/tRkXrzT.png)
  4. In the Bot submenu (navigate using the left sidebar), hit **Add Bot** and then confirm the dialog box. [(img)](https://i.imgur.com/Cw6sM22.png)
